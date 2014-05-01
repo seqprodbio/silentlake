@@ -18,7 +18,7 @@ public class SampleDto {
    private String name;
    private String parents;
    private String projectName;
-   private String sampleName;
+   private String sampleType;
    private String url;
    private Integer id;
    private Set<AttributeDto> attributes;
@@ -57,12 +57,12 @@ public class SampleDto {
    }
 
    @XmlElement(name = "sample_type")
-   public String getSampleName() {
-      return sampleName;
+   public String getSampleType() {
+      return sampleType;
    }
 
-   public void setSampleName(String sampleName) {
-      this.sampleName = sampleName;
+   public void setSampleType(String sampleType) {
+      this.sampleType = sampleType;
    }
 
    public String getUrl() {
