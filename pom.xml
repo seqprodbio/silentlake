@@ -11,12 +11,24 @@
    <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+      <seqware.version>1.0.14</seqware.version>
    </properties>
 
    <modules>
       <module>silentlake-ws-dto</module>
    </modules>
-   
+
+   <dependencyManagement>
+      <dependencies>
+         <dependency>
+            <groupId>com.github.seqware</groupId>
+            <artifactId>seqware-admin-webservice</artifactId>
+            <version>${seqware.version}</version>
+            <classifier>classes</classifier>
+         </dependency>
+      </dependencies>
+   </dependencyManagement>
+
    <build>
       <plugins>
          <plugin>
@@ -51,7 +63,25 @@
                <targetJdk>1.7</targetJdk>
             </configuration>
          </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-eclipse-plugin</artifactId>
+            <configuration>
+               <downloadSources>true</downloadSources>
+               <downloadJavadocs>true</downloadJavadocs>
+            </configuration>
+         </plugin>
       </plugins>
    </build>
+
+   <repositories>
+      <repository>
+         <id>seqwaremaven.oicr.on.ca</id>
+         <name>seqwaremaven.oicr.on.ca-releases</name>
+         <url>http://seqwaremaven.oicr.on.ca/artifactory/seqware-release</url>
+      </repository>
+   </repositories>
+
+
 
 </project>
