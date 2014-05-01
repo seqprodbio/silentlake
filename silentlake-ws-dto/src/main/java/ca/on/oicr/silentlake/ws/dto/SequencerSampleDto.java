@@ -7,7 +7,7 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-@XmlRootElement(name = "sample")
+@XmlRootElement(name = "sequencer_sample")
 @JsonAutoDetect
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class SequencerSampleDto {

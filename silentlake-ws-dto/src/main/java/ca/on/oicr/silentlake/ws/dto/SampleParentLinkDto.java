@@ -7,7 +7,9 @@ import org.codehaus.jackson.annotate.JsonAutoDetect;
 import org.codehaus.jackson.map.annotate.JsonSerialize;
 import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 
-//Used by hierarchy
+/*
+ * Used by hierarchy
+ */
 
 @XmlRootElement(name = "sample_parent_link")
 @JsonAutoDetect
