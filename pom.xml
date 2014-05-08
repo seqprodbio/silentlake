@@ -12,20 +12,90 @@
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
       <seqware.version>1.0.14</seqware.version>
+      <resteasy.version>3.0.7.Final</resteasy.version>
+      <slf4j.version>1.6.6</slf4j.version>
+      <log4j.version>1.2.16</log4j.version>
+      <jackson.version>1.9.4</jackson.version>
    </properties>
 
    <modules>
       <module>silentlake-ws-dto</module>
+      <module>silentlake-ws</module>
    </modules>
 
    <dependencyManagement>
       <dependencies>
+         <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.11</version>
+            <scope>test</scope>
+         </dependency>
+         <dependency>
+            <groupId>org.hamcrest</groupId>
+            <artifactId>hamcrest-library</artifactId>
+            <version>1.3</version>
+            <scope>test</scope>
+         </dependency>
+         <dependency>
+            <groupId>ca.on.oicr</groupId>
+            <artifactId>silentlake-ws-dto</artifactId>
+            <version>${project.version}</version>
+         </dependency>
          <dependency>
             <groupId>com.github.seqware</groupId>
             <artifactId>seqware-admin-webservice</artifactId>
             <version>${seqware.version}</version>
             <classifier>classes</classifier>
          </dependency>
+         <!-- <dependency> <groupId>org.jboss.resteasy</groupId> <artifactId>resteasy-jackson2-provider</artifactId> <version>${resteasy.version}</version> 
+            </dependency> -->
+
+         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-api</artifactId>
+            <version>${slf4j.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>${slf4j.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>log4j</groupId>
+            <artifactId>log4j</artifactId>
+            <version>${log4j.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-servlet-initializer</artifactId>
+            <version>${resteasy.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxrs</artifactId>
+            <version>${resteasy.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>jaxrs-api</artifactId>
+            <version>${resteasy.version}</version>
+         </dependency>
+
+         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jaxb-provider</artifactId>
+            <version>${resteasy.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>org.jboss.resteasy</groupId>
+            <artifactId>resteasy-jettison-provider</artifactId>
+            <version>${resteasy.version}</version>
+         </dependency>
+
       </dependencies>
    </dependencyManagement>
 
@@ -39,6 +109,7 @@
                <source>1.7</source>
                <target>1.7</target>
             </configuration>
+            <!--  
             <dependencies>
                <dependency>
                   <groupId>org.codehaus.plexus</groupId>
@@ -51,6 +122,7 @@
                   <version>1.8.2</version>
                </dependency>
             </dependencies>
+            -->
          </plugin>
          <plugin>
             <groupId>org.codehaus.mojo</groupId>
@@ -69,6 +141,40 @@
             <configuration>
                <downloadSources>true</downloadSources>
                <downloadJavadocs>true</downloadJavadocs>
+            </configuration>
+         </plugin>
+         <!--  
+         <plugin>
+            <groupId>org.mortbay.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>8.1.11.v20130520</version>
+            <configuration>
+               <scanIntervalSeconds>10</scanIntervalSeconds>
+               <webApp>
+                  <contextPath>/${project.artifactId}</contextPath>
+               </webApp>
+               <connectors>
+                  <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+                     <port>8000</port>
+                     <maxIdleTime>60000</maxIdleTime>
+                  </connector>
+               </connectors>
+            </configuration>
+         </plugin>
+         -->
+         <plugin>
+            <groupId>org.eclipse.jetty</groupId>
+            <artifactId>jetty-maven-plugin</artifactId>
+            <version>9.2.0.M0</version>
+            <configuration>
+               <webApp>
+                  <contextPath>/${project.artifactId}</contextPath>
+               </webApp>
+               <scanIntervalSeconds>10</scanIntervalSeconds>
+               <!--  
+               <stopKey>foo</stopKey>
+               <stopPort>9999</stopPort>
+               -->
             </configuration>
          </plugin>
       </plugins>
