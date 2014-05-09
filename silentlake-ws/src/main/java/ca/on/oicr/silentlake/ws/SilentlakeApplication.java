@@ -11,8 +11,10 @@ public class SilentlakeApplication extends Application {
 
    public SilentlakeApplication() {
       // ADD YOUR RESTFUL RESOURCES HERE
-      this.singletons.add(new TestResource());
-      this.singletons.add(new UsersResource());
+      // this.singletons.add(new TestResource());
+      // this.singletons.add(new UsersResource());
+      getClasses().add(TestResource.class);
+      getClasses().add(UsersResource.class);
    }
 
    @Override

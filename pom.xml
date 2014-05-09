@@ -16,11 +16,21 @@
       <slf4j.version>1.6.6</slf4j.version>
       <log4j.version>1.2.16</log4j.version>
       <jackson.version>1.9.4</jackson.version>
+      <maven-failsafe-plugin.version>2.15</maven-failsafe-plugin.version>
+      <maven-war-plugin.version>2.3</maven-war-plugin.version>
+      <postgresql.version>9.1-901.jdbc3</postgresql.version>
+      <!-- use for filtering of web service context files and related -->
+      <seqware_meta_db_name>seqware_meta_db</seqware_meta_db_name>
+      <seqware_meta_db_port>5432</seqware_meta_db_port>
+      <seqware_meta_db_password></seqware_meta_db_password>
+      <seqware_meta_db_user>tdebat</seqware_meta_db_user>
+      <seqware_meta_db_host>localhost</seqware_meta_db_host>
    </properties>
 
    <modules>
       <module>silentlake-ws-dto</module>
       <module>silentlake-ws</module>
+      <module>silentlake-service</module>
    </modules>
 
    <dependencyManagement>
@@ -40,6 +50,11 @@
          <dependency>
             <groupId>ca.on.oicr</groupId>
             <artifactId>silentlake-ws-dto</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>ca.on.oicr</groupId>
+            <artifactId>silentlake-service</artifactId>
             <version>${project.version}</version>
          </dependency>
          <dependency>
@@ -96,6 +111,25 @@
             <version>${resteasy.version}</version>
          </dependency>
 
+         <dependency>
+            <groupId>javax</groupId>
+            <artifactId>javaee-api</artifactId>
+            <version>7.0</version>
+         </dependency>
+
+         <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>javax.servlet-api</artifactId>
+            <version>3.1.0</version>
+            <scope>provided</scope>
+         </dependency>
+         <dependency>
+            <groupId>postgresql</groupId>
+            <artifactId>postgresql</artifactId>
+            <version>${postgresql.version}</version>
+            <scope>compile</scope>
+         </dependency>
+
       </dependencies>
    </dependencyManagement>
 
@@ -109,72 +143,129 @@
                <source>1.7</source>
                <target>1.7</target>
             </configuration>
-            <!--  
-            <dependencies>
-               <dependency>
-                  <groupId>org.codehaus.plexus</groupId>
-                  <artifactId>plexus-compiler-javac</artifactId>
-                  <version>1.8.2</version>
-               </dependency>
-               <dependency>
-                  <groupId>org.codehaus.plexus</groupId>
-                  <artifactId>plexus-compiler-api</artifactId>
-                  <version>1.8.2</version>
-               </dependency>
-            </dependencies>
-            -->
          </plugin>
          <plugin>
-            <groupId>org.codehaus.mojo</groupId>
-            <artifactId>findbugs-maven-plugin</artifactId>
-         </plugin>
-         <plugin>
-            <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-pmd-plugin</artifactId>
+            <groupId>org.glassfish.embedded</groupId>
+            <artifactId>maven-embedded-glassfish-plugin</artifactId>
+            <version>3.1.2.2</version>
             <configuration>
-               <targetJdk>1.7</targetJdk>
+               <contextRoot>seqware-admin-webservice</contextRoot>
+               <name>seqware-admin-webservice</name>
+               <port>38080</port>
+               <dbVendorName>postgresql</dbVendorName>
+               <libraries>${project.build.directory}/lib/postgresql-${postgresql.version}.jar</libraries>
+               <autoDelete>true</autoDelete>
+               <goalPrefix>embedded-glassfish</goalPrefix>
             </configuration>
          </plugin>
          <plugin>
             <groupId>org.apache.maven.plugins</groupId>
-            <artifactId>maven-eclipse-plugin</artifactId>
+            <artifactId>maven-resources-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>copy-resources</id>
+                  <phase>install</phase>
+                  <goals>
+                     <goal>copy-resources</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${basedir}/target/${project.artifactId}-${project.version}/WEB-INF/</outputDirectory>
+                     <resources>
+                        <resource>
+                           <directory>src/main/webapp/WEB-INF</directory>
+                           <filtering>true</filtering>
+                        </resource>
+                     </resources>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-war-plugin</artifactId>
+            <version>${maven-war-plugin.version}</version>
             <configuration>
-               <downloadSources>true</downloadSources>
-               <downloadJavadocs>true</downloadJavadocs>
+               <failOnMissingWebXml>false</failOnMissingWebXml>
+               <attachClasses>true</attachClasses>
+               <!-- supports configuration of tomcat on a different server for SPB's integration tests -->
+               <webResources>
+                  <resource>
+                     <directory>src/main/webapp/WEB-INF</directory>
+                     <filtering>true</filtering>
+                     <targetPath>WEB-INF</targetPath>
+                  </resource>
+               </webResources>
+
+               <packagingExcludes>**/servlet*.jar,META-INF/context.xml</packagingExcludes>
+               <archive>
+                  <manifest>
+                     <addClasspath>true</addClasspath>
+                     <classpathPrefix>lib/</classpathPrefix>
+                  </manifest>
+               </archive>
             </configuration>
          </plugin>
-         <!--  
          <plugin>
-            <groupId>org.mortbay.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>8.1.11.v20130520</version>
-            <configuration>
-               <scanIntervalSeconds>10</scanIntervalSeconds>
-               <webApp>
-                  <contextPath>/${project.artifactId}</contextPath>
-               </webApp>
-               <connectors>
-                  <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
-                     <port>8000</port>
-                     <maxIdleTime>60000</maxIdleTime>
-                  </connector>
-               </connectors>
-            </configuration>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-dependency-plugin</artifactId>
+            <version>2.1</version>
+            <executions>
+               <execution>
+                  <id>copy-dependencies</id>
+                  <phase>prepare-package</phase>
+                  <goals>
+                     <goal>copy-dependencies</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${project.build.directory}/lib</outputDirectory>
+                     <overWriteReleases>false</overWriteReleases>
+                     <overWriteSnapshots>false</overWriteSnapshots>
+                     <overWriteIfNewer>true</overWriteIfNewer>
+                  </configuration>
+               </execution>
+               <execution>
+                  <phase>validate</phase>
+                  <goals>
+                     <goal>copy</goal>
+                  </goals>
+                  <configuration>
+                     <outputDirectory>${endorsed.dir}</outputDirectory>
+                     <silent>true</silent>
+                     <artifactItems>
+                        <artifactItem>
+                           <groupId>javax</groupId>
+                           <artifactId>javaee-endorsed-api</artifactId>
+                           <version>6.0</version>
+                           <type>jar</type>
+                        </artifactItem>
+                     </artifactItems>
+                  </configuration>
+               </execution>
+            </executions>
          </plugin>
-         -->
          <plugin>
-            <groupId>org.eclipse.jetty</groupId>
-            <artifactId>jetty-maven-plugin</artifactId>
-            <version>9.2.0.M0</version>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-failsafe-plugin</artifactId>
+            <version>${maven-failsafe-plugin.version}</version>
+
+            <executions>
+               <execution>
+                  <id>integration-test</id>
+                  <goals>
+                     <goal>integration-test</goal>
+                  </goals>
+               </execution>
+               <execution>
+                  <id>verify</id>
+                  <goals>
+                     <goal>verify</goal>
+                  </goals>
+               </execution>
+            </executions>
+
             <configuration>
-               <webApp>
-                  <contextPath>/${project.artifactId}</contextPath>
-               </webApp>
-               <scanIntervalSeconds>10</scanIntervalSeconds>
-               <!--  
-               <stopKey>foo</stopKey>
-               <stopPort>9999</stopPort>
-               -->
+               <argLine>${itCoverageAgent} -Xms512m -Xmx512m</argLine>
+               <forkMode>pertest</forkMode>
             </configuration>
          </plugin>
       </plugins>
@@ -188,6 +279,17 @@
       </repository>
    </repositories>
 
-
+   <pluginRepositories>
+      <pluginRepository>
+         <id>maven.java.net</id>
+         <name>Java.net Repository for Maven</name>
+         <url>https://maven.java.net/content/groups/promoted/</url>
+      </pluginRepository>
+      <pluginRepository>
+         <id>maven2-repository.dev.java.net</id>
+         <name>Java.net Repository for Maven</name>
+         <url>http://download.java.net/maven/glassfish/</url>
+      </pluginRepository>
+   </pluginRepositories>
 
 </project>
