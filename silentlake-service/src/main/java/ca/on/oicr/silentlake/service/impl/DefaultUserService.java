@@ -3,6 +3,7 @@ package ca.on.oicr.silentlake.service.impl;
 import io.seqware.webservice.controller.CustomRegistrationFacadeREST;
 import io.seqware.webservice.generated.model.Registration;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -27,6 +28,13 @@ public class DefaultUserService implements UserService {
    @Override
    public List<Registration> getUsers() {
       return registrationDao.findAll();
+   }
+
+   @Override
+   public void create(Registration registration) {
+      registration.setCreateTstmp(new Date());
+      registration.setLastUpdateTstmp(new Date());
+      registrationDao.create(registration);
    }
 
 }

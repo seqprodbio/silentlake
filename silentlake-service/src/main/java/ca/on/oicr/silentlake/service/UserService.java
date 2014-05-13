@@ -13,4 +13,6 @@ public interface UserService {
 
    public List<Registration> getUsers();
 
+   public void create(Registration registration);
+
 }

@@ -32,6 +32,22 @@ public class Dtos {
       return returnDto;
    }
 
+   public static Registration fromDto(UserDto dto) {
+      Registration registration = new Registration();
+      return fromDto(dto, registration);
+   }
+
+   public static Registration fromDto(UserDto dto, Registration to) {
+      // TODO: check that registration is not null
+      to.setFirstName(dto.getFirstName());
+      to.setLastName(dto.getLastName());
+      to.setEmail(dto.getEmail());
+      if (dto.getInstitution() != null) {
+         to.setInstitution(dto.getInstitution());
+      }
+      return to;
+   }
+
    public static StudyDto asDto(Study from) {
       StudyDto returnDto = new StudyDto();
 
