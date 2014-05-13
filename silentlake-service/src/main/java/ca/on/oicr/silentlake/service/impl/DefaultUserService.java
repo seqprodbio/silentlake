@@ -14,16 +14,8 @@ import ca.on.oicr.silentlake.service.UserService;
 @Stateless
 public class DefaultUserService implements UserService {
 
-   // @PersistenceContext(unitName = "io.seqware_seqware-admin-webservice_war_1.0-SNAPSHOTPU")
-   // private EntityManager em;
-
    @EJB
    private CustomRegistrationFacadeREST registrationDao;
-
-   @Override
-   public String getName() {
-      return "Tony (DeBat)";
-   }
 
    @Override
    public List<Registration> getUsers() {
@@ -35,6 +27,12 @@ public class DefaultUserService implements UserService {
       registration.setCreateTstmp(new Date());
       registration.setLastUpdateTstmp(new Date());
       registrationDao.create(registration);
+   }
+
+   @Override
+   public void update(Registration registration) {
+      registration.setLastUpdateTstmp(new Date());
+      registrationDao.edit(registration);
    }
 
 }

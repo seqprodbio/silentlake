@@ -9,10 +9,10 @@ import javax.ejb.Local;
 @Local
 public interface UserService {
 
-   public String getName();
-
    public List<Registration> getUsers();
 
    public void create(Registration registration);
+
+   public void update(Registration registration);
 
 }
