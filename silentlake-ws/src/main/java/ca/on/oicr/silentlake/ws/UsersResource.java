@@ -2,6 +2,7 @@ package ca.on.oicr.silentlake.ws;
 
 import io.seqware.webservice.generated.model.Registration;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -12,7 +13,9 @@ import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import ca.on.oicr.silentlake.service.UserService;
 import ca.on.oicr.silentlake.ws.dto.Dtos;
@@ -28,6 +31,9 @@ public class UsersResource {
 
    @EJB
    private UserService userService;
+
+   @Context
+   private UriInfo uriInfo;
 
    @GET
    @Path("/testuser")
@@ -47,12 +53,14 @@ public class UsersResource {
    @Produces(MediaType.APPLICATION_JSON)
    public List<UserDto> getUsers() {
       List<UserDto> users = Lists.newArrayList();
+      final URI baseUri = uriInfo.getBaseUriBuilder().path("grape/user/").build();
       for (Registration user : userService.getUsers()) {
          System.out.println("dooly " + user.getEmail());
          UserDto userDto = Dtos.asDto(user);
          Integer id = getId(user.getInvitationCode());
          if (id != null) {
             userDto.setId(id);
+            userDto.setUrl(baseUri.toString() + id);
             users.add(userDto);
          }
       }
