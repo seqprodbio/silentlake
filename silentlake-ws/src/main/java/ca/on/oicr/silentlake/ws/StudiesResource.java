@@ -4,6 +4,7 @@ import io.seqware.webservice.generated.model.Study;
 import io.seqware.webservice.generated.model.StudyAttribute;
 
 import java.net.URI;
+import java.util.Collection;
 import java.util.List;
 
 import javax.ejb.EJB;
@@ -25,6 +26,8 @@ import com.google.common.collect.Lists;
 @Path("/studies")
 public class StudiesResource {
 
+   public static final String ID_KEY = "geo_lab_group_id";
+
    @EJB
    private StudyService studyService;
 
@@ -38,14 +41,22 @@ public class StudiesResource {
       final URI baseUri = uriInfo.getBaseUriBuilder().path("study/").build();
       for (Study study : studyService.getStudies()) {
          StudyDto studyDto = Dtos.asDto(study);
-         for (StudyAttribute attr : study.getStudyAttributeCollection()) {
-            System.out.println(attr.getTag() + "=" + attr.getValue());
-         }
-         Integer id = 44;
+         Integer id = getId(study.getStudyAttributeCollection(), ID_KEY);
+         studyDto.setId(id);
          studyDto.setUrl(baseUri.toString() + id);
          studies.add(studyDto);
       }
       return studies;
    }
 
+   private Integer getId(Collection<StudyAttribute> attributes, String idKey) {
+      Integer result = null;
+      for (StudyAttribute attribute : attributes) {
+         if (attribute.getTag().equals(idKey)) {
+            result = Integer.valueOf(attribute.getValue());
+            break;
+         }
+      }
+      return result;
+   }
 }

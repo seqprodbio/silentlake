@@ -61,6 +61,22 @@ public class Dtos {
       return returnDto;
    }
 
+   public static Study fromDto(StudyDto dto) {
+      Study study = new Study();
+      return fromDto(dto, study);
+   }
+
+   public static Study fromDto(StudyDto dto, Study to) {
+      // TODO: check that registration is not null
+      to.setTitle(dto.getTitle());
+      to.setCenterName(dto.getInstitution());
+      to.setCenterProjectName(dto.getInstitutionProjectName());
+      if (dto.getDescription() != null) {
+         to.setDescription(dto.getDescription());
+      }
+      return to;
+   }
+
    public static ExperimentLibraryDesignDto asDto(ExperimentLibraryDesign from) {
       ExperimentLibraryDesignDto returnDto = new ExperimentLibraryDesignDto();
 
