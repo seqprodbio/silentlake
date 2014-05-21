@@ -39,8 +39,6 @@ public class StudyResource {
       final URI baseUri = uriInfo.getBaseUriBuilder().path("study/").build();
 
       Study study = studyService.getStudy(id);
-      System.out.println("spoogy man id: " + study.getStudyId());
-      System.out.println("google juice swAccession: " + study.getSwAccession());
       if (study != null) {
          StudyDto studyDto = Dtos.asDto(study);
          studyDto.setId(id);
