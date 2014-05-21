@@ -6,14 +6,14 @@ easy.
 Silentlake is a webservice that reads and writes to the 
 SeqWare database and simplifies the process of
 synchronizing sequencer run and sample data between a LIMS (Labratory 
-Information Management System) and SeqWare easy by exposing an API that only
+Information Management System) and SeqWare by exposing an API that only
 includes the required resources and fields necessary to successfully 
 populate SeqWare with the data it requires to function.
 
 ## Features
 
 * Only resources required to populate the SeqWare database are exposed.
-* Within those resource only the required fields are exposed.
+* Within those resources only the required fields are exposed.
 * Resources are created and retrieved using user provided ids, making it
 possible to track items in SeqWare using ids that originate from an
 external LIMS system.
