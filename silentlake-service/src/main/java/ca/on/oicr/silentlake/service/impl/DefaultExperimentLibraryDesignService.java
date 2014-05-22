@@ -3,6 +3,8 @@ package ca.on.oicr.silentlake.service.impl;
 import io.seqware.webservice.controller.CustomExperimentLibraryDesignFacadeREST;
 import io.seqware.webservice.generated.model.ExperimentLibraryDesign;
 
+import java.util.List;
+
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -33,6 +35,16 @@ public class DefaultExperimentLibraryDesignService implements ExperimentLibraryD
    @Override
    public ExperimentLibraryDesign getExperimentLibraryDesign(Integer id) {
       return experimentLibraryDesignFacadeRest.find(id);
+   }
+
+   @Override
+   public void deleteExperimentLibraryDesign(Integer id) {
+      experimentLibraryDesignFacadeRest.remove(id);
+   }
+
+   @Override
+   public List<ExperimentLibraryDesign> getExperimentLibraryDesigns() {
+      return experimentLibraryDesignFacadeRest.findAll();
    }
 
 }

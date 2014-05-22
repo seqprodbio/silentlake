@@ -11,6 +11,7 @@ import java.util.List;
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
@@ -85,6 +86,12 @@ public class ExperimentLibraryDesignResource {
             librarySources.get(0), librarySelections.get(0));
       Integer id = experimentLibraryDesignService.create(experimentLibraryDesign);
       System.out.println(id);
+   }
+
+   @DELETE
+   @Path("/{id}")
+   public void deleteExperimentLibraryDesign(@PathParam("id") Integer id) {
+      experimentLibraryDesignService.deleteExperimentLibraryDesign(id);
    }
 
    public static ExperimentLibraryDesign fromDto(ExperimentLibraryDesignDto dto, LibraryStrategy strategy, LibrarySource source,
