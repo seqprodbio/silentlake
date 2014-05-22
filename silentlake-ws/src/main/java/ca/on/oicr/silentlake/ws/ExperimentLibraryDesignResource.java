@@ -5,19 +5,26 @@ import io.seqware.webservice.generated.model.LibrarySelection;
 import io.seqware.webservice.generated.model.LibrarySource;
 import io.seqware.webservice.generated.model.LibraryStrategy;
 
+import java.net.URI;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
+import javax.ws.rs.core.UriInfo;
 
 import ca.on.oicr.silentlake.service.ExperimentLibraryDesignService;
 import ca.on.oicr.silentlake.service.LibrarySelectionService;
 import ca.on.oicr.silentlake.service.LibrarySourceService;
 import ca.on.oicr.silentlake.service.LibraryStrategyService;
+import ca.on.oicr.silentlake.ws.dto.Dtos;
 import ca.on.oicr.silentlake.ws.dto.ExperimentLibraryDesignDto;
 
 @Stateless
@@ -35,6 +42,26 @@ public class ExperimentLibraryDesignResource {
 
    @EJB
    private ExperimentLibraryDesignService experimentLibraryDesignService;
+
+   @Context
+   private UriInfo uriInfo;
+
+   @GET
+   @Path("/{id}")
+   @Produces(MediaType.APPLICATION_JSON)
+   public ExperimentLibraryDesignDto getExperimentLibraryDesign(@PathParam("id") Integer id) {
+      ExperimentLibraryDesignDto result = null;
+      final URI baseUri = uriInfo.getBaseUriBuilder().path("experimentlibrarydesign/").build();
+
+      ExperimentLibraryDesign experimentLibraryDesign = experimentLibraryDesignService.getExperimentLibraryDesign(id);
+      if (experimentLibraryDesign != null) {
+         result = Dtos.asDto(experimentLibraryDesign);
+         result.setId(id);
+         result.setUrl(baseUri.toString() + id);
+      }
+
+      return result;
+   }
 
    @POST
    @Consumes(MediaType.APPLICATION_JSON)

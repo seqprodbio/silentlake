@@ -40,10 +40,9 @@ public class StudyResource {
 
       Study study = studyService.getStudy(id);
       if (study != null) {
-         StudyDto studyDto = Dtos.asDto(study);
-         studyDto.setId(id);
-         studyDto.setUrl(baseUri.toString() + id);
-         result = studyDto;
+         result = Dtos.asDto(study);
+         result.setId(id);
+         result.setUrl(baseUri.toString() + id);
       }
       return result;
    }

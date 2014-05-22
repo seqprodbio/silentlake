@@ -30,4 +30,9 @@ public class DefaultExperimentLibraryDesignService implements ExperimentLibraryD
       }
    }
 
+   @Override
+   public ExperimentLibraryDesign getExperimentLibraryDesign(Integer id) {
+      return experimentLibraryDesignFacadeRest.find(id);
+   }
+
 }

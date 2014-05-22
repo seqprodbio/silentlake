@@ -9,4 +9,6 @@ public interface ExperimentLibraryDesignService {
 
    public Integer create(ExperimentLibraryDesign experimentLibraryDesign);
 
+   public ExperimentLibraryDesign getExperimentLibraryDesign(Integer id);
+
 }
