@@ -90,7 +90,7 @@ public class ExperimentLibraryDesignResource {
 
    @DELETE
    @Path("/{id}")
-   public void deleteExperimentLibraryDesign(@PathParam("id") Integer id) {
+   public void removeExperimentLibraryDesign(@PathParam("id") Integer id) {
       experimentLibraryDesignService.deleteExperimentLibraryDesign(id);
    }
 

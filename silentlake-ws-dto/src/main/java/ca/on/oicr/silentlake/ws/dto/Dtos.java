@@ -108,6 +108,21 @@ public class Dtos {
       return returnDto;
    }
 
+   public static ExperimentSpotDesign fromDto(ExperimentSpotDesignDto dto) {
+      ExperimentSpotDesign experimentSpotDesign = new ExperimentSpotDesign();
+      return fromDto(dto, experimentSpotDesign);
+   }
+
+   public static ExperimentSpotDesign fromDto(ExperimentSpotDesignDto dto, ExperimentSpotDesign to) {
+      if (dto.getReadSpec() != null) {
+         to.setReadSpec(dto.getReadSpec());
+      }
+      if (dto.getReadsPerSpot() != null) {
+         to.setReadsPerSpot(dto.getReadsPerSpot());
+      }
+      return to;
+   }
+
    public static ExperimentDto asDto(Experiment from) {
       ExperimentDto returnDto = new ExperimentDto();
 
