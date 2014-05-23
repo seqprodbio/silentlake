@@ -10,6 +10,7 @@ import io.seqware.webservice.generated.model.Platform;
 
 import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
@@ -93,7 +94,7 @@ public class DefaultExperimentService implements ExperimentService {
       experimentFacadeRest.create(experiment);
       em.flush();
       if (experiment.getExperimentId() != null) {
-         return experiment.getExperimentId();
+         return experiment.getExperimentId(); // Returns sw_accession which is not really what we wanted
       } else {
          return 99999;
       }
@@ -102,6 +103,11 @@ public class DefaultExperimentService implements ExperimentService {
    @Override
    public void deleteExperiment(Integer id) {
       experimentFacadeRest.remove(id);
+   }
+
+   @Override
+   public List<Experiment> getExperiments() {
+      return experimentFacadeRest.findAll();
    }
 
 }

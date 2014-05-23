@@ -2,6 +2,8 @@ package ca.on.oicr.silentlake.service;
 
 import io.seqware.webservice.generated.model.Experiment;
 
+import java.util.List;
+
 import javax.ejb.Local;
 
 import ca.on.oicr.silentlake.ws.dto.ExperimentDto;
@@ -16,4 +18,6 @@ public interface ExperimentService {
    public Integer create(Experiment experiment);
 
    public void deleteExperiment(Integer id);
+
+   public List<Experiment> getExperiments();
 }

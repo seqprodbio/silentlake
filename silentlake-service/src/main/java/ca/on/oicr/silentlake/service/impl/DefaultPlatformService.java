@@ -18,7 +18,6 @@ public class DefaultPlatformService implements PlatformService {
 
    @Override
    public List<Platform> getPlatformByName(String name) {
-      System.out.println("And I'm returning stuff!");
       return platformDao.getPlatformByName(name);
    }
 
