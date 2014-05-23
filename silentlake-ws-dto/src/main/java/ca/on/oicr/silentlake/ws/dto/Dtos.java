@@ -130,13 +130,25 @@ public class Dtos {
          returnDto.setName(from.getName());
       }
       if (from.getSequenceSpace() != null) {
-         returnDto.setSequencerSpace(returnDto.getSequencerSpace());
+         returnDto.setSequenceSpace(from.getSequenceSpace());
       }
       if (from.getQualityType() != null) {
          returnDto.setQualityType(from.getQualityType());
       }
-      if (from.getPlatformId().getName() != null) {
+      if (from.getPlatformId() != null && from.getPlatformId().getName() != null) {
          returnDto.setPlatform(from.getPlatformId().getName());
+      }
+      if (from.getExperimentLibraryDesignId() != null && from.getExperimentLibraryDesignId().getExperimentLibraryDesignId() != null) {
+         returnDto.setExperimentLibraryDesignId(from.getExperimentLibraryDesignId().getExperimentLibraryDesignId());
+      }
+      if (from.getExperimentSpotDesignId() != null && from.getExperimentSpotDesignId().getExperimentSpotDesignId() != null) {
+         returnDto.setExperimentSpotDesignId(from.getExperimentSpotDesignId().getExperimentSpotDesignId());
+      }
+      if (from.getOwnerId() != null && from.getOwnerId().getRegistrationId() != null) {
+         returnDto.setUserId(from.getOwnerId().getRegistrationId());
+      }
+      if (from.getStudyId() != null && from.getStudyId().getStudyId() != null) {
+         returnDto.setStudyId(from.getStudyId().getStudyId());
       }
 
       return returnDto;

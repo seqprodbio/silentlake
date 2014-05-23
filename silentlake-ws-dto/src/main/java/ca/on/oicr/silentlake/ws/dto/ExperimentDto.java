@@ -17,7 +17,7 @@ public class ExperimentDto {
    private String experimentSpotDesignUrl;
    private String platform;
    private String name;
-   private String sequencerSpace;
+   private String sequenceSpace;
    private String qualityType;
    private String userUrl;
    private String url;
@@ -70,13 +70,13 @@ public class ExperimentDto {
       this.name = name;
    }
 
-   @XmlElement(name = "sequencer_space")
-   public String getSequencerSpace() {
-      return sequencerSpace;
+   @XmlElement(name = "sequence_space")
+   public String getSequenceSpace() {
+      return sequenceSpace;
    }
 
-   public void setSequencerSpace(String sequencerSpace) {
-      this.sequencerSpace = sequencerSpace;
+   public void setSequenceSpace(String sequenceSpace) {
+      this.sequenceSpace = sequenceSpace;
    }
 
    @XmlElement(name = "quality_type")
