@@ -17,6 +17,7 @@ import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import ca.on.oicr.silentlake.persistence.ExperimentDao;
 import ca.on.oicr.silentlake.service.ExperimentService;
 import ca.on.oicr.silentlake.service.PlatformService;
 import ca.on.oicr.silentlake.ws.dto.ExperimentDto;
@@ -38,6 +39,9 @@ public class DefaultExperimentService implements ExperimentService {
 
    @EJB
    private CustomRegistrationFacadeREST registrationFacadeRest;
+
+   @EJB
+   private ExperimentDao experimentDao;
 
    @EJB
    private PlatformService platformService;
@@ -94,7 +98,8 @@ public class DefaultExperimentService implements ExperimentService {
       experimentFacadeRest.create(experiment);
       em.flush();
       if (experiment.getExperimentId() != null) {
-         return experiment.getExperimentId(); // Returns sw_accession which is not really what we wanted
+         return experimentDao.getIdFromAccession(experiment.getExperimentId()); // We need to double check that experiment.getExperimentId()
+                                                                                // returns the accession id each time (so far it has)
       } else {
          return 99999;
       }

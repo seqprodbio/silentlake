@@ -35,12 +35,21 @@ public class ExperimentsResource {
    public List<ExperimentDto> getExperiments() {
       List<ExperimentDto> experiments = Lists.newArrayList();
       final URI baseUri = uriInfo.getBaseUriBuilder().path("experiment/").build();
+      final URI userBaseUri = uriInfo.getBaseUriBuilder().path("user/").build();
+      final URI studyBaseUri = uriInfo.getBaseUriBuilder().path("study/").build();
+      final URI experimentLibraryDesignUri = uriInfo.getBaseUriBuilder().path("experimentlibrarydesign/").build();
+      final URI experimentSpotDesignUri = uriInfo.getBaseUriBuilder().path("experimentspotdesign/").build();
 
       for (Experiment experiment : experimentService.getExperiments()) {
          ExperimentDto experimentDto = Dtos.asDto(experiment);
          experimentDto.setId(experiment.getExperimentId()); // In this case, it returns the id but this may not always be the case (it may
                                                             // return sw_accession)
          experimentDto.setUrl(baseUri.toString() + experiment.getExperimentId());
+         experimentDto.setExperimentLibraryDesignUrl(experimentLibraryDesignUri.toString() + experimentDto.getExperimentLibraryDesignId());
+         experimentDto.setExperimentSpotDesignUrl(experimentSpotDesignUri.toString() + experimentDto.getExperimentSpotDesignId());
+         experimentDto.setUserUrl(userBaseUri.toString() + experimentDto.getUserId());
+         experimentDto.setStudyUrl(studyBaseUri.toString() + experimentDto.getStudyId());
+
          experiments.add(experimentDto);
       }
       return experiments;
