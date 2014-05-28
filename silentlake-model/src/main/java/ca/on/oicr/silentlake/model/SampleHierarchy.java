@@ -4,68 +4,36 @@ import io.seqware.webservice.generated.model.Sample;
 
 import java.io.Serializable;
 
-import javax.persistence.Basic;
-import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.Size;
+import javax.persistence.UniqueConstraint;
 import javax.xml.bind.annotation.XmlRootElement;
 
 @Entity
-@Table(name = "sample_hierarchy")
+@Table(name = "sample_hierarchy", uniqueConstraints = @UniqueConstraint(columnNames = { "sample_id", "parent_id" }))
 @XmlRootElement
-@NamedQueries({
-      @NamedQuery(name = "SampleRelationship.findAll", query = "SELECT s FROM SampleRelationship s"),
-      @NamedQuery(name = "SampleRelationship.findBySampleRelationshipId", query = "SELECT s FROM SampleRelationship s WHERE s.sampleRelationshipId = :sampleRelationshipId"),
-      @NamedQuery(name = "SampleRelationship.findByRelationship", query = "SELECT s FROM SampleRelationship s WHERE s.relationship = :relationship") })
 public class SampleHierarchy implements Serializable {
    private static final long serialVersionUID = 1L;
-   @Id
-   @GeneratedValue(strategy = GenerationType.IDENTITY)
-   @Basic(optional = false)
-   @Column(name = "sample_relationship_id")
-   private Integer sampleRelationshipId;
 
-   @Size(max = 2147483647)
-   @Column(name = "relationship")
-   private String relationship;
+   @JoinColumn(name = "sample_id", referencedColumnName = "sample_id")
+   @ManyToOne(optional = false)
+   private Sample sampleId;
 
    @JoinColumn(name = "parent_id", referencedColumnName = "sample_id")
    @ManyToOne
    private Sample parentId;
 
-   @JoinColumn(name = "child_id", referencedColumnName = "sample_id")
-   @ManyToOne
-   private Sample childId;
-
    public SampleHierarchy() {
    }
 
-   public SampleHierarchy(Integer sampleRelationshipId) {
-      this.sampleRelationshipId = sampleRelationshipId;
+   public Sample getSampleId() {
+      return sampleId;
    }
 
-   public Integer getSampleRelationshipId() {
-      return sampleRelationshipId;
-   }
-
-   public void setSampleRelationshipId(Integer sampleRelationshipId) {
-      this.sampleRelationshipId = sampleRelationshipId;
-   }
-
-   public String getRelationship() {
-      return relationship;
-   }
-
-   public void setRelationship(String relationship) {
-      this.relationship = relationship;
+   public void setSampleId(Sample sampleId) {
+      this.sampleId = sampleId;
    }
 
    public Sample getParentId() {
@@ -76,38 +44,28 @@ public class SampleHierarchy implements Serializable {
       this.parentId = parentId;
    }
 
-   public Sample getChildId() {
-      return childId;
-   }
-
-   public void setChildId(Sample childId) {
-      this.childId = childId;
-   }
-
    @Override
    public int hashCode() {
-      int hash = 0;
-      hash += (sampleRelationshipId != null ? sampleRelationshipId.hashCode() : 0);
-      return hash;
+      final int prime = 31;
+      int result = 1;
+      result = prime * result + ((sampleId == null) ? 0 : sampleId.hashCode());
+      result = prime * result + ((parentId == null) ? 0 : parentId.hashCode());
+      return result;
    }
 
    @Override
-   public boolean equals(Object object) {
-      // TODO: Warning - this method won't work in the case the id fields are not set
-      if (!(object instanceof SampleHierarchy)) {
-         return false;
-      }
-      SampleHierarchy other = (SampleHierarchy) object;
-      if ((this.sampleRelationshipId == null && other.sampleRelationshipId != null)
-            || (this.sampleRelationshipId != null && !this.sampleRelationshipId.equals(other.sampleRelationshipId))) {
-         return false;
-      }
+   public boolean equals(Object obj) {
+      if (this == obj) return true;
+      if (obj == null) return false;
+      if (getClass() != obj.getClass()) return false;
+      SampleHierarchy other = (SampleHierarchy) obj;
+      if (sampleId == null) {
+         if (other.sampleId != null) return false;
+      } else if (!sampleId.equals(other.sampleId)) return false;
+      if (parentId == null) {
+         if (other.parentId != null) return false;
+      } else if (!parentId.equals(other.parentId)) return false;
       return true;
-   }
-
-   @Override
-   public String toString() {
-      return "io.seqware.webservice.model.SampleRelationship[ sampleRelationshipId=" + sampleRelationshipId + " ]";
    }
 
 }
