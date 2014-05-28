@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <groupId>ca.on.oicr</groupId>
    <artifactId>silentlake</artifactId>
@@ -21,8 +22,8 @@
       <!-- use for filtering of web service context files and related -->
       <seqware_meta_db_name>seqware_meta_db</seqware_meta_db_name>
       <seqware_meta_db_port>5432</seqware_meta_db_port>
-      <seqware_meta_db_password/>
-      <seqware_meta_db_user/>
+      <seqware_meta_db_password />
+      <seqware_meta_db_user />
       <seqware_meta_db_host>localhost</seqware_meta_db_host>
    </properties>
 
@@ -30,9 +31,9 @@
       <module>silentlake-ws-dto</module>
       <module>silentlake-ws</module>
       <module>silentlake-service</module>
-    <module>silentlake-persistence</module>
-    <module>silentlake-model</module>
-  </modules>
+      <module>silentlake-persistence</module>
+      <module>silentlake-model</module>
+   </modules>
 
    <dependencyManagement>
       <dependencies>
@@ -61,6 +62,11 @@
          <dependency>
             <groupId>ca.on.oicr</groupId>
             <artifactId>silentlake-persistence</artifactId>
+            <version>${project.version}</version>
+         </dependency>
+         <dependency>
+            <groupId>ca.on.oicr</groupId>
+            <artifactId>silentlake-model</artifactId>
             <version>${project.version}</version>
          </dependency>
          <dependency>
