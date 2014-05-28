@@ -27,7 +27,10 @@
          <groupId>ca.on.oicr</groupId>
          <artifactId>silentlake-persistence</artifactId>
       </dependency>
-
+      <dependency>
+         <groupId>ca.on.oicr</groupId>
+         <artifactId>silentlake-model</artifactId>
+      </dependency>
 
       <!-- <dependency> <groupId>javax.servlet</groupId> <artifactId>javax.servlet-api</artifactId> <scope>provided</scope> </dependency> -->
 

@@ -8,12 +8,15 @@ import io.seqware.webservice.generated.model.Lane;
 import io.seqware.webservice.generated.model.Registration;
 import io.seqware.webservice.generated.model.Sample;
 import io.seqware.webservice.generated.model.SampleAttribute;
-import io.seqware.webservice.generated.model.SampleRelationship;
 import io.seqware.webservice.generated.model.SequencerRun;
 import io.seqware.webservice.generated.model.Study;
 
 import java.util.Collection;
+import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+
+import ca.on.oicr.silentlake.model.SampleHierarchy;
 
 import com.google.common.collect.Sets;
 
@@ -249,13 +252,19 @@ public class Dtos {
       return returnDto;
    }
 
-   // This is the class contained within hierarchy
-   // SampleRelationship may not be the correct class to use here
-   public static SampleParentLinkDto asDto(SampleRelationship from) {
-      SampleParentLinkDto returnDto = new SampleParentLinkDto();
+   public static Set<SampleHierarchyDto> asDto(List<SampleHierarchy> sampleHierarchies) {
+      Set<SampleHierarchyDto> returnDtos = new HashSet<SampleHierarchyDto>();
+      for (SampleHierarchy sampleHierarchy : sampleHierarchies) {
+         returnDtos.add(asDto(sampleHierarchy));
+      }
+      return returnDtos;
+   }
 
-      if (from.getChildId() != null) {
-         returnDto.setSampleId(from.getChildId().getSampleId());
+   public static SampleHierarchyDto asDto(SampleHierarchy from) {
+      SampleHierarchyDto returnDto = new SampleHierarchyDto();
+
+      if (from.getSampleId() != null) {
+         returnDto.setSampleId(from.getSampleId().getSampleId());
       }
       if (from.getParentId() != null) {
          returnDto.setParentId(from.getParentId().getSampleId());

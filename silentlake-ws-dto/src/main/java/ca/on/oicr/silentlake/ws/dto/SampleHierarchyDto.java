@@ -14,7 +14,7 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @XmlRootElement(name = "sample_parent_link")
 @JsonAutoDetect
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class SampleParentLinkDto {
+public class SampleHierarchyDto {
 
    private Integer sampleId;
    private Integer parentId;

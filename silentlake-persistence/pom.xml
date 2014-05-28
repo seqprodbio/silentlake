@@ -29,5 +29,9 @@
          <artifactId>junit</artifactId>
          <scope>test</scope>
       </dependency>
+      <dependency>
+         <groupId>ca.on.oicr</groupId>
+         <artifactId>silentlake-model</artifactId>
+      </dependency>
    </dependencies>
 </project>

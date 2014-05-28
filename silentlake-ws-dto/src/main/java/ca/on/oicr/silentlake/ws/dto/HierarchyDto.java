@@ -13,13 +13,13 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class HierarchyDto {
 
-   private Set<SampleParentLinkDto> hierarchy;
+   private Set<SampleHierarchyDto> hierarchy;
 
-   public Set<SampleParentLinkDto> getHierarchy() {
+   public Set<SampleHierarchyDto> getHierarchy() {
       return hierarchy;
    }
 
-   public void setHierarchy(Set<SampleParentLinkDto> hierarchy) {
+   public void setHierarchy(Set<SampleHierarchyDto> hierarchy) {
       this.hierarchy = hierarchy;
    }
 
