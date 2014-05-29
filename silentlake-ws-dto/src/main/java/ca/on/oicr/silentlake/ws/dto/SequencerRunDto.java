@@ -1,6 +1,6 @@
 package ca.on.oicr.silentlake.ws.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -19,7 +19,7 @@ public class SequencerRunDto {
    private String instrumentName;
    private String url;
    private Integer id;
-   private Set<PositionDto> positions;
+   private List<LaneDto> positions;
 
    public String getState() {
       return state;
@@ -62,11 +62,11 @@ public class SequencerRunDto {
       this.id = id;
    }
 
-   public Set<PositionDto> getPositions() {
+   public List<LaneDto> getPositions() {
       return positions;
    }
 
-   public void setPositions(Set<PositionDto> positions) {
+   public void setPositions(List<LaneDto> positions) {
       this.positions = positions;
    }
 

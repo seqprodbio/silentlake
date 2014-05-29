@@ -18,6 +18,7 @@ import java.util.Set;
 
 import ca.on.oicr.silentlake.model.SampleHierarchy;
 
+import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;
 
 public class Dtos {
@@ -210,8 +211,8 @@ public class Dtos {
       return returnDto;
    }
 
-   public static Set<PositionDto> asPositionSetDto(Collection<Lane> from) {
-      Set<PositionDto> returnSetDto = Sets.newHashSet();
+   public static List<LaneDto> asPositionSetDto(Collection<Lane> from) {
+      List<LaneDto> returnSetDto = Lists.newArrayList();
 
       for (Lane lane : from) {
          returnSetDto.add(asDto(lane));
@@ -220,8 +221,9 @@ public class Dtos {
       return returnSetDto;
    }
 
-   public static PositionDto asDto(Lane from) {
-      PositionDto returnDto = new PositionDto();
+   public static LaneDto asDto(Lane from) {
+      LaneDto returnDto = new LaneDto();
+
       if (from.getLaneIndex() != null) {
          returnDto.setPosition(from.getLaneIndex());
       }
@@ -231,8 +233,8 @@ public class Dtos {
       return returnDto;
    }
 
-   public static Set<SequencerSampleDto> asSequencerSampleSetDto(Collection<Ius> from) {
-      Set<SequencerSampleDto> returnSetDto = Sets.newHashSet();
+   public static List<SequencerSampleDto> asSequencerSampleSetDto(Collection<Ius> from) {
+      List<SequencerSampleDto> returnSetDto = Lists.newArrayList();
 
       for (Ius ius : from) {
          returnSetDto.add(asDto(ius));
@@ -241,12 +243,14 @@ public class Dtos {
       return returnSetDto;
    }
 
-   // TODO: Double check with Tony that Ius is the data that SequencerSampleDto is supposed to be representing
    public static SequencerSampleDto asDto(Ius from) {
       SequencerSampleDto returnDto = new SequencerSampleDto();
 
       if (from.getTag() != null) {
          returnDto.setBarcode(from.getTag());
+      }
+      if (from.getSampleId() != null && from.getSampleId().getSampleId() != null) {
+         returnDto.setSampleId(from.getSampleId().getSampleId());
       }
 
       return returnDto;
@@ -254,6 +258,7 @@ public class Dtos {
 
    public static Set<SampleHierarchyDto> asDto(List<SampleHierarchy> sampleHierarchies) {
       Set<SampleHierarchyDto> returnDtos = new HashSet<SampleHierarchyDto>();
+
       for (SampleHierarchy sampleHierarchy : sampleHierarchies) {
          returnDtos.add(asDto(sampleHierarchy));
       }

@@ -1,6 +1,6 @@
 package ca.on.oicr.silentlake.ws.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -15,10 +15,10 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @XmlRootElement(name = "position")
 @JsonAutoDetect
 @JsonSerialize(include = Inclusion.NON_NULL)
-public class PositionDto {
+public class LaneDto {
 
    private Integer position;
-   private Set<SequencerSampleDto> samples;
+   private List<SequencerSampleDto> samples;
 
    public Integer getPosition() {
       return position;
@@ -28,11 +28,11 @@ public class PositionDto {
       this.position = position;
    }
 
-   public Set<SequencerSampleDto> getSamples() {
+   public List<SequencerSampleDto> getSamples() {
       return samples;
    }
 
-   public void setSamples(Set<SequencerSampleDto> samples) {
+   public void setSamples(List<SequencerSampleDto> samples) {
       this.samples = samples;
    }
 
