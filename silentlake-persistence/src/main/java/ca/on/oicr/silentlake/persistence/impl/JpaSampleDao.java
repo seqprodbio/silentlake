@@ -47,7 +47,7 @@ public class JpaSampleDao implements SampleDao {
 
    @Override
    public Integer getIdFromAccession(Integer swAccession) { // Works for both samples and libraries
-      Query query = em.createQuery("SELECT s.sampleId from Sample s WHERE s.swAccession = :swAccession").setParameter("swAccession",
+      Query query = em.createQuery("SELECT s.sampleId FROM Sample s WHERE s.swAccession = :swAccession").setParameter("swAccession",
             swAccession);
       return getSingleResultOrNull(query);
    }

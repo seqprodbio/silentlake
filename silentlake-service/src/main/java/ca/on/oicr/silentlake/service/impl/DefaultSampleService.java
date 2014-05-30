@@ -85,9 +85,12 @@ public class DefaultSampleService implements SampleService {
    public List<SampleAttribute> fromDto(Set<AttributeDto> attributeDtos, Sample sample) {
       List<SampleAttribute> result = Lists.newArrayList(); // Not sure if this is the data type we want to use
 
-      for (AttributeDto attributeDto : attributeDtos) {
-         result.add(fromDto(attributeDto, sample));
+      if (attributeDtos != null) {
+         for (AttributeDto attributeDto : attributeDtos) {
+            result.add(fromDto(attributeDto, sample));
+         }
       }
+
       return result;
    }
 
@@ -123,7 +126,8 @@ public class DefaultSampleService implements SampleService {
       Integer newSampleId = sampleDao.getIdFromAccession(sample.getSampleId()); // Works for libraries too
 
       Sample newSample = sampleFacadeRest.find(newSampleId);
-      setAttributes(sampleDto, newSample);
+      setAttributes(sampleDto, newSample); // The SampleAttribute class has a field sampleId which needs a Sample so they have to
+                                           // set/created after the Sample is created
       newSample = setId(newSample, id);
    }
 

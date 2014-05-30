@@ -227,20 +227,7 @@ public class Dtos {
       if (from.getLaneIndex() != null) {
          returnDto.setPosition(from.getLaneIndex());
       }
-      if (from.getIusCollection() != null && !from.getIusCollection().isEmpty()) {
-         returnDto.setSamples(asSequencerSampleSetDto(from.getIusCollection()));
-      }
       return returnDto;
-   }
-
-   public static List<SequencerSampleDto> asSequencerSampleSetDto(Collection<Ius> from) {
-      List<SequencerSampleDto> returnSetDto = Lists.newArrayList();
-
-      for (Ius ius : from) {
-         returnSetDto.add(asDto(ius));
-      }
-
-      return returnSetDto;
    }
 
    public static SequencerSampleDto asDto(Ius from) {

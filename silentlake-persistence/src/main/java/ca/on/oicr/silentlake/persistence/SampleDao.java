@@ -4,6 +4,9 @@ import io.seqware.webservice.generated.model.Sample;
 
 import java.util.List;
 
+import javax.ejb.Local;
+
+@Local
 public interface SampleDao {
 
    public Sample getSample(Integer id);
