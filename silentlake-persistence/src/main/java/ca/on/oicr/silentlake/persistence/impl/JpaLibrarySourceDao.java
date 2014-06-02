@@ -25,4 +25,12 @@ public class JpaLibrarySourceDao implements LibrarySourceDao {
       return query.getResultList();
    }
 
+   @SuppressWarnings("unchecked")
+   @Override
+   public List<String> getLibrarySourceNames() {
+      Query query = em.createQuery("SELECT ls.name FROM LibrarySource ls");
+
+      return query.getResultList();
+   }
+
 }

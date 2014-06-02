@@ -11,4 +11,5 @@ public interface LibraryStrategyService {
 
    public List<LibraryStrategy> getLibraryStrategyByName(String name);
 
+   public List<String> getLibraryStrategyNames();
 }

@@ -21,4 +21,9 @@ public class DefaultLibraryStrategyService implements LibraryStrategyService {
       return libraryStrategyDao.getLibraryStrategyByName(name);
    }
 
+   @Override
+   public List<String> getLibraryStrategyNames() {
+      return libraryStrategyDao.getLibraryStrategyNames();
+   }
+
 }

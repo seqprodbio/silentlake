@@ -21,4 +21,9 @@ public class DefaultLibrarySelectionService implements LibrarySelectionService {
       return librarySelectionDao.getLibrarySelectionByName(name);
    }
 
+   @Override
+   public List<String> getLibrarySelectionNames() {
+      return librarySelectionDao.getLibrarySelectionNames();
+   }
+
 }

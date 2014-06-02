@@ -21,4 +21,9 @@ public class DefaultLibrarySourceService implements LibrarySourceService {
       return librarySourceDao.getLibrarySourceByName(name);
    }
 
+   @Override
+   public List<String> getLibrarySourceNames() {
+      return librarySourceDao.getLibrarySourceNames();
+   }
+
 }

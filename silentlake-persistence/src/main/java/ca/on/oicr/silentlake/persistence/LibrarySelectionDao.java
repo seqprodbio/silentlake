@@ -11,4 +11,5 @@ public interface LibrarySelectionDao {
 
    public List<LibrarySelection> getLibrarySelectionByName(String name);
 
+   public List<String> getLibrarySelectionNames();
 }

@@ -25,4 +25,12 @@ public class JpaLibraryStrategyDao implements LibraryStrategyDao {
       return query.getResultList();
    }
 
+   @SuppressWarnings("unchecked")
+   @Override
+   public List<String> getLibraryStrategyNames() {
+      Query query = em.createQuery("SELECT ls.name FROM LibraryStrategy ls");
+
+      return query.getResultList();
+   }
+
 }

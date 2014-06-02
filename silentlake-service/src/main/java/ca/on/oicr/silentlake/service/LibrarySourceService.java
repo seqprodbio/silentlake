@@ -11,4 +11,5 @@ public interface LibrarySourceService {
 
    public List<LibrarySource> getLibrarySourceByName(String name);
 
+   public List<String> getLibrarySourceNames();
 }

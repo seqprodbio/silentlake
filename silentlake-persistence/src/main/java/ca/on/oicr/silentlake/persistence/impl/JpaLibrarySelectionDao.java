@@ -24,4 +24,12 @@ public class JpaLibrarySelectionDao implements LibrarySelectionDao {
 
       return query.getResultList();
    }
+
+   @SuppressWarnings("unchecked")
+   @Override
+   public List<String> getLibrarySelectionNames() {
+      Query query = em.createQuery("SELECT ls.name FROM LibrarySelection ls");
+
+      return query.getResultList();
+   }
 }
