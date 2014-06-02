@@ -20,9 +20,10 @@ public class JpaSampleDao implements SampleDao {
 
    @Override
    public Sample getSample(Integer id) {
-      Query query = em.createQuery(
-            "SELECT s FROM Sample s, IN(s.sampleAttributeCollection) sa WHERE sa.tag LIKE 'geo_template_id' and sa.value LIKE :id")
-            .setParameter("id", id.toString()); // Note that this could return a library (need to fix this)
+      Query query = em
+            .createQuery(
+                  "SELECT s FROM Sample s, IN(s.sampleAttributeCollection) sa WHERE ( SELECT COUNT(sa2) FROM s.sampleAttributeCollection sa2 WHERE sa2.tag LIKE 'geo_run_id_and_position_and_slot') = 0 AND sa.tag LIKE 'geo_template_id' and sa.value LIKE :id")
+            .setParameter("id", id.toString());
       return getSingleResultOrNull(query);
    }
 
@@ -41,7 +42,8 @@ public class JpaSampleDao implements SampleDao {
    @SuppressWarnings("unchecked")
    @Override
    public List<Sample> getSamples(String idKey) {
-      Query query = em.createQuery("SELECT s FROM Sample s"); // This could also return a library
+      Query query = em
+            .createQuery("SELECT DISTINCT(s) FROM Sample s WHERE ( SELECT COUNT(sa) FROM s.sampleAttributeCollection sa WHERE sa.tag LIKE 'geo_run_id_and_position_and_slot') = 0");
       return query.getResultList();
    }
 

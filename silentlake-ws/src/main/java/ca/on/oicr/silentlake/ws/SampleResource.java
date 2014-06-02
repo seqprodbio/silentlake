@@ -52,12 +52,17 @@ public class SampleResource {
    @Consumes(MediaType.APPLICATION_JSON)
    public void add(@PathParam("id") Integer id, SampleDto sampleDto) {
       Sample existingSample = sampleService.getSample(id);
-      if (existingSample == null) {
-         Sample sample = sampleService.fromDto(sampleDto);
-         sampleService.create(sample, id, sampleDto);
+      Sample existingLibrary = sampleService.getLibrary(id);
+      if (existingLibrary == null) {
+         if (existingSample == null) {
+            Sample sample = sampleService.fromDto(sampleDto);
+            sampleService.create(sample, id, sampleDto);
+         } else {
+            Sample sample = sampleService.fromDto(sampleDto, existingSample);
+            sampleService.update(sample, sampleDto);
+         }
       } else {
-         Sample sample = sampleService.fromDto(sampleDto, existingSample);
-         sampleService.update(sample, sampleDto);
+         // TODO:Return error code
       }
    }
 

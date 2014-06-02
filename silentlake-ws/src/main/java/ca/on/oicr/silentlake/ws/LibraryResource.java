@@ -53,12 +53,18 @@ public class LibraryResource {
    @Consumes(MediaType.APPLICATION_JSON)
    public void add(@PathParam("id") Integer id, SampleDto sampleDto) {
       Sample existingLibrary = sampleService.getLibrary(id);
-      if (existingLibrary == null) {
-         Sample library = sampleService.fromDto(sampleDto);
-         sampleService.create(library, id, sampleDto);
+      Sample existingSample = sampleService.getSample(id);
+      if (existingSample == null) {
+         if (existingLibrary == null) {
+            Sample library = sampleService.fromDto(sampleDto);
+            sampleService.create(library, id, sampleDto); // I assume that the geo_template_id attribute is passed in the sampleDto so no
+                                                          // need to make a different create method
+         } else {
+            Sample library = sampleService.fromDto(sampleDto, existingLibrary);
+            sampleService.update(library, sampleDto);
+         }
       } else {
-         Sample library = sampleService.fromDto(sampleDto, existingLibrary);
-         sampleService.update(library, sampleDto);
+         // TODO: Return error code
       }
    }
 

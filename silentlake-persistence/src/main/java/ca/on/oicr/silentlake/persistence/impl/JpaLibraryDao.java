@@ -20,9 +20,10 @@ public class JpaLibraryDao implements LibraryDao {
 
    @Override
    public Sample getLibrary(Integer id) {
-      Query query = em.createQuery(
-            "SELECT s FROM Sample s, IN(s.sampleAttributeCollection) sa WHERE sa.tag LIKE 'geo_template_id' and sa.value LIKE :id")
-            .setParameter("id", id.toString()); // Note that this could return a sample (need to fix this)
+      Query query = em
+            .createQuery(
+                  "SELECT s FROM Sample s, IN(s.sampleAttributeCollection) sa, IN(s.sampleAttributeCollection) sa2 WHERE sa.tag LIKE 'geo_template_id' and sa.value LIKE :id AND sa2.tag LIKE 'geo_run_id_and_position_and_slot'")
+            .setParameter("id", id.toString()); // The above query could be slow with a lot amount of data and could be improved
       return getSingleResultOrNull(query);
    }
 
@@ -30,12 +31,7 @@ public class JpaLibraryDao implements LibraryDao {
    @Override
    public List<Sample> getLibraries(String idKey) {
       Query query = em
-            .createQuery("SELECT s FROM Sample s, IN(s.sampleAttributeCollection) sa WHERE sa.tag LIKE 'geo_run_id_and_position_and_slot'"); // This
-                                                                                                                                             // could
-                                                                                                                                             // also
-                                                                                                                                             // return
-                                                                                                                                             // a
-                                                                                                                                             // sample
+            .createQuery("SELECT s FROM Sample s, IN(s.sampleAttributeCollection) sa WHERE sa.tag LIKE 'geo_run_id_and_position_and_slot'");
       return query.getResultList();
    }
 
