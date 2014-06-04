@@ -21,6 +21,7 @@ import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
+import ca.on.oicr.silentlake.persistence.LaneDao;
 import ca.on.oicr.silentlake.persistence.SequencerRunDao;
 import ca.on.oicr.silentlake.service.SampleService;
 import ca.on.oicr.silentlake.service.SequencerRunService;
@@ -47,6 +48,9 @@ public class DefaultSequencerRunService implements SequencerRunService {
 
    @EJB
    SequencerRunDao sequencerRunDao;
+
+   @EJB
+   LaneDao laneDao;
 
    @EJB
    SampleService sampleService;
@@ -119,9 +123,16 @@ public class DefaultSequencerRunService implements SequencerRunService {
             lane.setCreateTstmp(new Date());
             lane.setUpdateTstmp(new Timestamp(new Date().getTime()));
 
+            laneFacadeRest.create(lane);
+            em.flush();
+
+            Integer newId = laneDao.getIdFromSwAccession(lane.getLaneId());
+
+            Lane newLane = laneFacadeRest.find(newId);
+
             List<Ius> iuses = Lists.newArrayList();
             for (SequencerSampleDto sequencerSampleDto : laneDto.getSamples()) {
-               Ius ius = fromDto(sequencerSampleDto, lane);
+               Ius ius = fromDto(sequencerSampleDto, newLane);
                ius.setCreateTstmp(new Date());
                ius.setUpdateTstmp(new Timestamp(new Date().getTime()));
 
@@ -130,9 +141,7 @@ public class DefaultSequencerRunService implements SequencerRunService {
                em.flush();
             }
             lane.setIusCollection(iuses);
-            laneFacadeRest.create(lane);
-            em.flush();
-            lanes.add(lane);
+            lanes.add(newLane);
          }
       }
       sequencerRun.setLaneCollection(lanes);

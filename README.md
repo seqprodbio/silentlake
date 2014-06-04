@@ -62,6 +62,7 @@ connection in the root pom.xml file via the following settings.
     curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/studies | python -mjson.tool
 
 During development consider using the browser plugin Postman to manage and run queries.
+To see how to use more features, see the usages.md file.
 
 ## License
 

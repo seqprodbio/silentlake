@@ -1,0 +1,241 @@
+## Usages
+
+This document contains examples on how to use all of the current features of SilentLake to access and modify the SeqWare database.
+You will need to run all commands containing -d @filename in a directory with a file that have the name of the filename used in the command. 
+The contents of the files that we used are available at the end of this file. Some modification to the files may be required depending on the data you have in the SeqWare database.
+
+### Usage Examples
+
+    # Add a user
+    curl -X PUT -H "Content-Type:application/json" -d '{ "email": "first.last@oicr.on.ca", "institution": "OICR", "firstname": "first", "lastname": "last" }' http://localhost:38080/seqware-admin-webservice/webresources/user/42
+    # Retrieve user
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/user/42
+    # Retrieve all users
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/users
+
+    # Add a study
+    curl -X PUT -H "Content-Type:application/json" -d '{ "title": "HeterogeneityinBC", "description": "Heterogeneity in Breast Cancer", "institution": "Ontario Institute for Cancer Research", "institution_project_name": "HiBC", "type_id": 11, "owner_id": 42 }' http://localhost:38080/seqware-admin-webservice/webresources/study/120
+    # Retrieve a study
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/study/120
+    # Retrieve all studies
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/studies
+
+    #Add an experiment library design
+    curl -X POST -H "Content-Type:application/json" -d @postExperimentLibraryDesign.json http://localhost:38080/seqware-admin-webservice/webresources/experimentlibrarydesign
+    #Retrieve a specific experiment library design (desired id will likely not be 17, retrieve all objects and look at names to find the id)
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/experimentlibrarydesign/17
+    #Delete a experiment library design (desired id will likely not be 17, retrieve all objects and look at names to find the id)
+    curl -X DELETE http://localhost:38080/seqware-admin-webservice/webresources/experimentlibrarydesign/17
+    #Retrieve all experiment library designs
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/experimentlibrarydesigns
+
+    #Add a experiment spot design
+    curl -X POST -H "Content-Type:application/json" -d @postExperimentSpotDesign.json http://localhost:38080/seqware-admin-webservice/webresources/experimentspotdesign
+    #Retrieve a specific experiment spot design (desired id will likely not be 26, retrieve all objects and look at read_spec and reads_per_spot to find the id)
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/experimentspotdesign/26
+    #Delete an experiment spot design (desired id will likely not be 26, retrieve all objects and look at read_spec and reads_per_spot to find the id)
+    curl -X DELETE http://localhost:38080/seqware-admin-webservice/webresources/experimentspotdesign/26
+    #Retrieve all experiment spot designs
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/experimentspotdesigns 
+
+    #Add an experiment
+    curl -X POST -H "Content-Type:application/json" -d @postExperiment.json http://localhost:38080/seqware-admin-webservice/webresources/experiment
+    #Retrieve a specific experiment
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/experiment/28
+    #Delete an experiment
+    curl -X DELETE http://localhost:38080/seqware-admin-webservice/webresources/experiment/28
+    #Retrieve all experiments
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/experiments
+
+    #Add a library
+    curl -X PUT -H "Content-Type:application/json" -d @putLibrary.json http://localhost:38080/seqware-admin-webservice/webresources/library/123456
+    #Retrieve a library
+    curl -X GET  http://localhost:38080/seqware-admin-webservice/webresources/library/123456
+    #Delete a library
+    curl -X DELETE http://localhost:38080/seqware-admin-webservice/webresources/library/123456
+    #Retrieve all libraries
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/libraries
+
+    #Add a sample
+    curl -X PUT -H "Content-Type:application/json" -d @putSample.json http://localhost:38080/seqware-admin-webservice/webresources/sample/5555
+    #Retrieve a sample
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/sample/5555
+    #Delete a sample
+    curl -X DELETE http://localhost:38080/seqware-admin-webservice/webresources/sample/5555
+    #Retrieve all samples
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/samples
+
+    #Add a sequencer run
+    curl -X PUT -H "Content-Type:application/json" -d @putSequencerRun.json http://localhost:38080/seqware-admin-webservice/webresources/sequencerrun/123456
+    #Retrieve a specific sequencer run
+    curl -X38080/seqware-admin-webservice/webresources/sequencerrun/123456
+    #Retrieve all sequencer runs
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/sequencerruns
+
+    #Retrieve all library sources
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/librarysources
+
+    #Retrieve all library strategies
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/librarystrategies
+
+    #Retrieve all library selections
+    curl -X GET http://localhost:38080/seqware-admin-webservice/webresources/libraryselections
+
+
+## Contents of files used in examples
+
+Note: You may need to change the value of some fields depending on the data within your database. 
+The values that may need to be changed will be the ids of specific resources and possibly the names of the resource element (e.g, you may need to change the line "source": "GENOMIC", if there is no library source with the name "GENOMIC" in your database or you may need to change the line "user_id": 1 in postExperiment.json if you do not have a user with an id of 1 in your database) 
+
+### Contents of postExperimentLibraryDesign.json
+    {
+      "name":"NELD - New Experiment Library Design",
+      "strategy": "WXS",
+      "source": "GENOMIC",
+      "selection": "RANDOM"
+    }
+
+### Contents of postExperimentSpotDesign.json
+    {
+      "reads_per_spot": "2",
+      "read_spec": "{F*76}{..}{R*26}"
+    }
+
+### Contents of postExperiment.json
+    {
+      "study_id": 4,
+      "experiment_library_design_id": 7,
+      "experiment_spot_design_id": 15,
+      "platform": "ION_TORRENT",
+      "name": "Generated name",
+      "sequence_space": "Base Space",
+      "quality_type": "phred",
+      "user_id": 1
+    }
+
+### Contents of putLibrary.json
+    {
+      "attributes": [
+        {
+          "name": "Library Source",
+          "value": "GENOMIC"
+        },
+        {
+          "name": "Library Strategy",
+          "value": "WXS"
+        },
+        {
+          "name": "Tissue Origin",
+          "value": "Bm"
+        },
+        {
+          "name": "Barcode",
+          "value": "Agilent_23_ACTATGCA"
+        },
+        {
+          "name": "Library Type",
+          "value": "PE"
+        },
+        {
+          "name": "Library Selection Process",
+          "value": "Hybrid Selection"
+        },
+        {
+          "name": "Organism",
+          "value": "Homo sapiens"
+        },
+        {
+          "name": "Source Template Type",
+          "value": "TS"
+        },
+        {
+          "name": "Tissue Type",
+          "value": "X"
+        },
+        {
+          "name": "geo_run_id_and_position_and_slot",
+          "value": "5"
+        }
+      ],
+      "children": "https://pinery.hpc.oicr.on.ca:8443/pinery/sample/34536",
+      "name": "User Generated Library",
+      "parents": "https://pinery.hpc.oicr.on.ca:8443/pinery/sample/32599",
+      "project_name": "HALT",
+      "sample_type": "Illumina PE Library"
+    }
+
+### Contents of putSample.json
+    {
+      "attributes": [
+        {
+          "name": "Library Source",
+          "value": "GENOMIC"
+        },
+        {
+          "name": "Library Strategy",
+          "value": "WXS"
+        },
+        {
+          "name": "Tissue Origin",
+          "value": "Bm"
+        },
+        {
+          "name": "Barcode",
+          "value": "Agilent_23_ACTATGCA"
+        },
+        {
+          "name": "Library Type",
+          "value": "PE"
+        },
+        {
+          "name": "Library Selection Process",
+          "value": "Hybrid Selection"
+        },
+        {
+          "name": "Organism",
+          "value": "Homo sapiens"
+        },
+        {
+          "name": "Source Template Type",
+          "value": "TS"
+        },
+        {
+          "name": "Tissue Type",
+          "value": "X"
+        }
+      ],
+      "children": "https://pinery.hpc.oicr.on.ca:8443/pinery/sample/34536",
+      "name": "User Generated Sample",
+      "parents": "https://pinery.hpc.oicr.on.ca:8443/pinery/sample/32599",
+      "project_name": "HALT",
+      "sample_type": "Illumina PE Library"
+    }
+    
+### Contents of putSequencerRun.json
+    {
+      "state": "Completed",
+      "name": "User Generated Sequencer Run",
+      "positions": [
+        {
+          "position": 1,
+          "samples": [
+            {
+              "barcode": "TCGTCAGA",
+              "sample_url": "http://localhost:38080/seqware-admin-webservice/webresources/sample/4455",
+              "sample_id": 2
+            }
+          ]
+        },
+        {
+          "position": 2,
+          "samples": [
+            {
+              "barcode": "ACTAGGA",
+              "sample_url": "http://localhost:38080/seqware-admin-webservice/webresources/sample/1",
+              "sample_id": 1
+            }
+          ]
+        }
+      ],
+      "instrument_name": "h804"
+    }
