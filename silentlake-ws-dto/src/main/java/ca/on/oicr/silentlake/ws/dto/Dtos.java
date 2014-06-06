@@ -8,6 +8,7 @@ import io.seqware.webservice.generated.model.Lane;
 import io.seqware.webservice.generated.model.Registration;
 import io.seqware.webservice.generated.model.Sample;
 import io.seqware.webservice.generated.model.SampleAttribute;
+import io.seqware.webservice.generated.model.SampleHierarchy;
 import io.seqware.webservice.generated.model.SequencerRun;
 import io.seqware.webservice.generated.model.Study;
 
@@ -15,8 +16,6 @@ import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import ca.on.oicr.silentlake.model.SampleHierarchy;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Sets;

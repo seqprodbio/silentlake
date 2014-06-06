@@ -45,4 +45,6 @@ public interface SampleService {
 
    public List<Sample> getLibraries(String idKey);
 
+   public Sample getSampleFromList(Integer sampleId, List<Sample> samples);
+
 }

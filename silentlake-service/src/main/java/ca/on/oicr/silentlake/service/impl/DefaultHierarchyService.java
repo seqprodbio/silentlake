@@ -1,73 +1,93 @@
 package ca.on.oicr.silentlake.service.impl;
 
-import java.util.HashSet;
+import io.seqware.webservice.generated.controller.SampleFacadeREST;
+import io.seqware.webservice.generated.model.Sample;
+
+import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 import javax.ejb.EJB;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import ca.on.oicr.silentlake.model.SampleHierarchy;
-import ca.on.oicr.silentlake.persistence.HierarchyDao;
 import ca.on.oicr.silentlake.service.HierarchyService;
 import ca.on.oicr.silentlake.service.SampleService;
 import ca.on.oicr.silentlake.ws.dto.SampleHierarchyDto;
+
+import com.google.common.collect.Lists;
 
 @Stateless
 public class DefaultHierarchyService implements HierarchyService {
 
    @EJB
-   HierarchyDao hierarchyDao;
-
-   @EJB
    SampleService sampleService;
 
-   @PersistenceContext
-   EntityManager em;
+   @EJB
+   SampleFacadeREST sampleFacadeRest;
 
-   @Override
-   public List<SampleHierarchy> getSampleHierarchies() {
-      return hierarchyDao.getSampleHierarchies();
-   }
+   @PersistenceContext
+   private EntityManager em;
 
    @Override
    public void deleteHierarchy() {
-      List<SampleHierarchy> sampleHierarchies = hierarchyDao.getSampleHierarchies();
-      for (SampleHierarchy sampleHierarchy : sampleHierarchies) {
-         em.remove(em.merge(sampleHierarchy));
-      }
-   }
-
-   @Override
-   public void createHierarchy(Set<SampleHierarchy> sampleHierarchies) {
-      for (SampleHierarchy sampleHierarchy : sampleHierarchies) {
-         em.persist(sampleHierarchy);
+      List<Sample> samples = sampleService.getSamples("geo_template_id");
+      List<Sample> emptyList = Lists.newArrayList();
+      for (Sample sample : samples) {
+         sample.setSampleCollection(emptyList);
+         sample.setSampleCollection1(emptyList);
+         sampleFacadeRest.edit(sample);
          em.flush();
       }
    }
 
    @Override
-   public Set<SampleHierarchy> fromDtos(Set<SampleHierarchyDto> hierarchy) {
-      Set<SampleHierarchy> returnSet = new HashSet<SampleHierarchy>();
-
-      for (SampleHierarchyDto sampleHierarchyDto : hierarchy) {
-         returnSet.add(fromDto(sampleHierarchyDto));
+   public void createHierarchy(List<SampleHierarchyDto> sampleHierarchyDtos) {
+      List<Sample> samples = sampleService.getSamples("geo_template_id");
+      for (SampleHierarchyDto sampleHierarchyDto : sampleHierarchyDtos) {
+         Sample sample = sampleService.getSampleFromList(sampleHierarchyDto.getSampleId(), samples);
+         Sample parentSample = sampleService.getSampleFromList(sampleHierarchyDto.getParentId(), samples);
+         if (sample == null) {
+            System.out.println("There does not exist a sample with the sample id that was passed in: " + sampleHierarchyDto.getSampleId());
+            return; // Return an error code
+         }
+         Collection<Sample> parentSamples = sample.getSampleCollection1(); // deleteHierarchy must have been called before this so all of
+                                                                           // the collections exist
+         parentSamples.add(parentSample);
+         sample.setSampleCollection1(parentSamples);
+         if (parentSample != null) {
+            Collection<Sample> childrenSamples = parentSample.getSampleCollection();
+            childrenSamples.add(sample);
+            parentSample.setSampleCollection(childrenSamples);
+            em.merge(parentSample);
+            em.flush();
+         }
+         em.merge(sample);
+         em.flush();
       }
-
-      return returnSet;
    }
 
    @Override
-   public SampleHierarchy fromDto(SampleHierarchyDto sampleHierarchyDto) {
-      SampleHierarchy sampleHierarchy = new SampleHierarchy();
-      sampleHierarchy.setSampleId(sampleService.getSample(sampleHierarchyDto.getSampleId()));
-      if (sampleHierarchyDto.getParentId() != null) {
-         sampleHierarchy.setParentId(sampleService.getSample(sampleHierarchyDto.getParentId()));
-      } else {
-         sampleHierarchy.setParentId(null);
+   public List<SampleHierarchyDto> getHierarchyDtos() {
+      List<SampleHierarchyDto> sampleHierarchyDtos = Lists.newArrayList();
+      List<Sample> samples = sampleService.getSamples("geo_template_id");
+      for (Sample sample : samples) {
+         if (sample.getSampleCollection1() != null && !sample.getSampleCollection1().isEmpty()) {
+            for (Sample parentSample : sample.getSampleCollection1()) {
+               SampleHierarchyDto sampleHierarchyDto = new SampleHierarchyDto();
+               sampleHierarchyDto.setParentId(sampleService.getId(parentSample.getSampleAttributeCollection(), "geo_template_id"));
+               sampleHierarchyDto.setSampleId(sampleService.getId(sample.getSampleAttributeCollection(), "geo_template_id"));
+               sampleHierarchyDtos.add(sampleHierarchyDto);
+            }
+         } else {
+            SampleHierarchyDto sampleHierarchyDto = new SampleHierarchyDto();
+            sampleHierarchyDto.setParentId(null);
+            sampleHierarchyDto.setSampleId(sampleService.getId(sample.getSampleAttributeCollection(), "geo_template_id"));
+            sampleHierarchyDtos.add(sampleHierarchyDto);
+         }
+
       }
-      return sampleHierarchy;
+
+      return sampleHierarchyDtos;
    }
 }

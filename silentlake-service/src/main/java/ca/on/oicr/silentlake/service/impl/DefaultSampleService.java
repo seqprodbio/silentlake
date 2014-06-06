@@ -191,4 +191,17 @@ public class DefaultSampleService implements SampleService {
       return libraryDao.getLibraries(idKey);
    }
 
+   @Override
+   public Sample getSampleFromList(Integer sampleId, List<Sample> samples) {
+      if (sampleId == null) {
+         return null;
+      }
+      for (Sample sample : samples) {
+         if (getId(sample.getSampleAttributeCollection(), "geo_template_id").equals(sampleId)) {
+            return sample;
+         }
+      }
+      return null;
+   }
+
 }

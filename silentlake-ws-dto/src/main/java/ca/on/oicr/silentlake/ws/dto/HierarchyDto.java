@@ -1,6 +1,6 @@
 package ca.on.oicr.silentlake.ws.dto;
 
-import java.util.Set;
+import java.util.List;
 
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -13,14 +13,14 @@ import org.codehaus.jackson.map.annotate.JsonSerialize.Inclusion;
 @JsonSerialize(include = Inclusion.NON_NULL)
 public class HierarchyDto {
 
-   private Set<SampleHierarchyDto> hierarchy;
+   private List<SampleHierarchyDto> hierarchy;
 
-   public Set<SampleHierarchyDto> getHierarchy() {
+   public List<SampleHierarchyDto> getHierarchy() {
       return hierarchy;
    }
 
-   public void setHierarchy(Set<SampleHierarchyDto> hierarchy) {
-      this.hierarchy = hierarchy;
+   public void setHierarchy(List<SampleHierarchyDto> list) {
+      this.hierarchy = list;
    }
 
 }

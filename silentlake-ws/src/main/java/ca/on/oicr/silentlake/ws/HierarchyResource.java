@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
 import ca.on.oicr.silentlake.service.HierarchyService;
-import ca.on.oicr.silentlake.ws.dto.Dtos;
 import ca.on.oicr.silentlake.ws.dto.HierarchyDto;
 
 @Stateless
@@ -24,7 +23,7 @@ public class HierarchyResource {
    @Produces(MediaType.APPLICATION_JSON)
    public HierarchyDto getHierarchy() {
       HierarchyDto hierarchyDto = new HierarchyDto();
-      hierarchyDto.setHierarchy(Dtos.asDto(hierarchyService.getSampleHierarchies()));
+      hierarchyDto.setHierarchy(hierarchyService.getHierarchyDtos());
       return hierarchyDto;
    }
 
@@ -32,6 +31,6 @@ public class HierarchyResource {
    @Consumes(MediaType.APPLICATION_JSON)
    public void add(HierarchyDto hierarchyDto) {
       hierarchyService.deleteHierarchy();
-      hierarchyService.createHierarchy(hierarchyService.fromDtos(hierarchyDto.getHierarchy()));
+      hierarchyService.createHierarchy(hierarchyDto.getHierarchy());
    }
 }
