@@ -51,9 +51,13 @@ public class ExperimentSpotDesignResource {
    @POST
    @Consumes(MediaType.APPLICATION_JSON)
    public void addExperimentSpotDesign(ExperimentSpotDesignDto experimentSpotDesignDto) {
-      ExperimentSpotDesign experimentSpotDesign = Dtos.fromDto(experimentSpotDesignDto);
-      Integer id = experimentSpotDesignService.create(experimentSpotDesign);
-      System.out.println(id);
+      if (experimentSpotDesignService.hasValidFields(experimentSpotDesignDto)) {
+         ExperimentSpotDesign experimentSpotDesign = Dtos.fromDto(experimentSpotDesignDto);
+         if (!experimentSpotDesignService.doesExperimentSpotDesignExistAlready(experimentSpotDesign)) {
+            Integer id = experimentSpotDesignService.create(experimentSpotDesign);
+            System.out.println(id);
+         }
+      }
    }
 
    @DELETE
